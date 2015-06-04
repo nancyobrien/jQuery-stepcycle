@@ -23,12 +23,10 @@ $max-width: 800px;
 .banner_overlay{
 	position:absolute;
 	z-index:900;
-	left:0;
-	top:0;
-	right:0;
-	bottom:0;
-	max-width: $max-width;
-	margin: 0 auto;
+	width: $max-width;
+	height: 100%;
+	left: 50%;
+	margin-left: -400px;
 }
 .banner_overlay_container{
 	position:absolute;
