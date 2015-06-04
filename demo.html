@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <body>
+		<div class="banner">
+			<div class="banner-slider">
+				
+				<ul class="banner-slider_nav"></ul>
+
+				<div class="banner_slide">
+					<img class="banner_image" src="images/slider-1.jpg" />
+					<div class="banner_overlay">
+						<div class="banner_overlay_container">
+							<h1 class="banner_overlay_header">Slide 1</h1>
+							<h2 class="banner_overlay_subhead">Sub text</h2>
+							<a class="banner_button" href="#"  data-buttontext="Get started now">Get started now<span class="icon icon--arrow icon--flushright"></span></a>
+						</div>
+					</div>
+				</div>
+				<div class="banner_slide">
+					<img class="banner_image" src="images/slider-2.jpg" />
+					<div class="banner_overlay">
+						<div class="banner_overlay_container">
+							<h1 class="banner_overlay_header">Slide 2</h1>
+							<h2 class="banner_overlay_subhead">Shankle jowl filet mignon pig, swine short ribs tongue spare ribs turkey venison jerky picanha biltong shoulder.</h2>
+							<a class="banner_button" href="#"  data-buttontext="Get started now">Get started now<span class="icon icon--arrow icon--flushright"></span></a>
+						</div>
+					</div>
+				</div>
+				<div class="banner_slide">
+					<img class="banner_image" src="images/slider-3.jpg" />
+					<div class="banner_overlay">
+						<div class="banner_overlay_container">
+							<h1 class="banner_overlay_header">Slide 3</h1>
+							<h2 class="banner_overlay_subhead">Venison biltong pancetta meatloaf ball tip, boudin strip steak tongue beef ribs.</h2>
+							<a class="banner_button" href="#"  data-buttontext="Get started now">Get started now<span class="icon icon--arrow icon--flushright"></span></a>
+						</div>
+					</div>
+				</div>
+				<div class="banner_slide">
+					<img class="banner_image" src="images/slider-4.jpg" />
+					<div class="banner_overlay">
+						<div class="banner_overlay_container">
+							<h1 class="banner_overlay_header">Slide 4</h1>
+							<h2 class="banner_overlay_subhead">Jerky bresaola strip steak cow bacon, pastrami sausage ham hock doner.</h2>
+							<a class="banner_button" href="#"  data-buttontext="Get started now">Get started now<span class="icon icon--arrow icon--flushright"></span></a>
+						</div>
+					</div>
+				</div>
+			
+				<div class="cycle_arrow-wrapper">
+					<a href="#" class="cycle_prev">&#x27b2;</a>
+					<a href="#" class="cycle_next">&#x27b2;</a>
+				</div>
+			</div>
+		</div>
+
+		<script src="js/jquery.js"></script>
+        <script src="js/jquery.stepcycle.js"></script>
+        <script>
+        	$(document).ready(function(e){
+        		$('.banner-slider').stepCycle({
+        			transition:'zoom', 
+        			childSelector: '.banner_slide', 
+        			transitionTime: .75, 
+        			navContainer: '.banner-slider_nav', 
+        			navDot:'banner-slider_nav_item', 
+        			navItemTemplate: '<li class="banner-slider_nav_item banner-slider_nav_item--is-selected"><a href="#">&bull;</a></li>',
+        			navSelectedClass: 'banner-slider_nav_item--is-selected'
+        		});
+        	})
+        </script>
+    </body>
+</html>
