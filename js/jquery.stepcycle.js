@@ -1,56 +1,20 @@
-/*
-    jQuery StepCycle v1.1 
-
-    Usage: 
-    <div class="banner-slider">
-
-        <ul class="banner-slider_nav"></ul>
-        
-        <div class="banner">
-            <img class="banner_image" src="/images/banner-placeholder.jpg" />
-            <div class="banner_overlay">
-                <div class="banner_overlay_container">
-                    <h1 class="banner_overlay_header">Title</h1>
-                    <h2 class="banner_overlay_subhead">Sub-Title</h2>
-                    <a class="banner_overlay_cta button button--color4 button--inline " href="#"  data-buttontext="Get started now">Get started now<span class="icon icon--arrow icon--flushright"></span></a>
-                </div>
-            </div>
-        </div>
-        <div class="banner">
-            <img class="banner_image" src="/images/banner-placeholder2.jpg" />
-            <div class="banner_overlay">
-                <div class="banner_overlay_container">
-                    <h1 class="banner_overlay_header">Title</h1>
-                    <h2 class="banner_overlay_subhead">Sub-Title</h2>
-                    <a class="banner_overlay_cta button button--color4 button--inline " href="#"  data-buttontext="Get started now">Get started now<span class="icon icon--arrow icon--flushright"></span></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        $(document).ready(function(e){
-            $('.banner-slider').stepCycle({transition:'fade', childSelector: '.banner', transitionTime: .75, navContainer: '.banner-slider_nav', navDot:'banner-slider_nav_item', navItemTemplate: '<li class="banner-slider_nav_item banner-slider_nav_item--is-selected"><a href="#">&bull;</a></li>',navSelectedClass: 'banner-slider_nav_item--is-selected'});
-        })
-    </script>
-*/
-
+/* jQuery StepCycle v1.1 */
 ;(function ( $, window, document, undefined ) {
 
     // Create the defaults once
     var pluginName = "stepCycle",
         defaults = {
             transitionTime: 1.5,
-            displayTime: 100,
+            displayTime: 5,
             transition: 'zoom',
             easing: 'linear',
-            navDot: 'navDot',
-            navContainer: '.navDots',
+            navDotClass: 'navDot',
+            navContainerSelector: '.navDots',
             navSelectedClass: 'selected',
             navItemTemplate: '<a class="navDot" href="#">&nbsp;</a>',
             prevButton: '.cycle_prev',
             nextButton: '.cycle_next',
-            childSelector: false,
+            childSelector: '.banner_slide',
             ie8CheckSelector: '.ltie9',
             showNav: true
         },
@@ -88,7 +52,7 @@
 
         // Properties
         this.timeout = 0;
-        this.navDotClass = this.options.navDot;
+        this.navDotClass = this.options.navDotClass;
         this.activeSlide = 0;
         this.transition = transitions[this.options.transition] || crossFade;
 
@@ -127,7 +91,7 @@
             if(this.options.showNav) {
                 setupNav(this, this.options);
             } else {
-                $(this.options.navContainer).hide();
+                $(this.options.navContainerSelector).hide();
             }
         }
     }
@@ -144,7 +108,7 @@
     // setup nav elements
     function setupNav(rotator, options) {
 
-        var $navContainer = $(options.navContainer);
+        var $navContainer = $(options.navContainerSelector);
 
         $navContainer.empty();
         rotator.slides.each(function(index, element) {
