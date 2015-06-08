@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<!--[if lt IE 9]><html class="no-js ltie9"><![endif]-->
+<!--[if gt IE 8]><!--><html><!--<![endif]-->
+
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -56,10 +59,10 @@
 						</div>
 					</div>
 				</div>
-			
+
 				<div class="cycle_arrow-wrapper">
-					<a href="#" class="cycle_prev">&#x27b2;</a>
-					<a href="#" class="cycle_next">&#x27b2;</a>
+					<a href="#" class="cycle_prev"></a>
+					<a href="#" class="cycle_next"></a>
 				</div>
 			</div>
 		</div>
@@ -68,9 +71,9 @@
         <script src="js/jquery.stepcycle.js"></script>
         <script>
         	$(document).ready(function(e){
-        		$('.banner-slider').stepCycle({
-        			transition:'fade', 
-        			childSelector: '.banner_slide', 
+        		var banner = $('.banner-slider').stepCycle({
+        			transition: 'zoom',
+        			childSelector: '.banner_slide',
         			transitionTime: .75, 
         			navContainer: '.banner-slider_nav', 
         			navDot:'banner-slider_nav_item', 

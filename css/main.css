@@ -97,20 +97,17 @@ body {
 .cycle_next {
   position: absolute;
   right: 5px;
-  color: #000;
-  text-decoration: none;
-  font-size: 30px; }
+  background: transparent url("../images/arrow-right.png") no-repeat center center;
+  display: block;
+  width: 21px;
+  height: 30px; }
 
 .cycle_prev {
   position: absolute;
   left: 5px;
-  color: #000;
-  text-decoration: none;
-  font-size: 30px;
-  -ms-transform: rotate(180deg);
-  /* IE 9 */
-  -webkit-transform: rotate(180deg);
-  /* Chrome, Safari, Opera */
-  transform: rotate(180deg); }
+  background: transparent url("../images/arrow-left.png") no-repeat center center;
+  display: block;
+  width: 21px;
+  height: 30px; }
 
 /*# sourceMappingURL=main.css.map */
