@@ -1,4 +1,4 @@
-/* jQuery StepCycle v1.1 */
+/* jQuery StepCycle v1.2 */
 ;(function ( $, window, document, undefined ) {
 
     // Create the defaults once
@@ -161,21 +161,24 @@
             $currentSlide = $(this.slides[this.activeSlide]),
             $nextSlide = $(this.slides[nextSlide]);
 
-        var fadingSlide = plugin.activeSlide;
-        
         if (isIE8(plugin.options.ie8CheckSelector)) {
             $currentSlide
-                .fadeOut(plugin.options.transitionTime * 1000)
+                .fadeOut(plugin.options.transitionTime * 1000, function() {
+                    $currentSlide.hide();
+                })
                 .find('.banner_image, .banner_overlay')
                 .fadeOut(plugin.options.transitionTime * 1000);
             $nextSlide
+                .show()
                 .fadeIn(plugin.options.transitionTime * 1000)
                 .find('.banner_image, .banner_overlay')
                 .fadeIn(plugin.options.transitionTime * 1000, function() {
                 plugin.startTimer();
             });
         } else {
-            $currentSlide.animate({'opacity': 0}, plugin.options.transitionTime * 1000, plugin.options.easing);
+            $currentSlide.animate({'opacity': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+                $currentSlide.hide();
+            });
             $nextSlide.css('opacity', 0).show().animate({'opacity': 1}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
                 plugin.startTimer();
             });
@@ -192,7 +195,9 @@
         var aniLeft = $currentSlide.width() * -.125;
         var aniTop = $nextSlide.height() * -.125;
 
-        $currentSlide.animate({'width': "125%", "height":"125%", 'opacity': 0, 'left':aniLeft, 'top':aniTop}, plugin.options.transitionTime * 1000/2);
+        $currentSlide.animate({'width': "125%", "height":"125%", 'opacity': 0, 'left':aniLeft, 'top':aniTop}, plugin.options.transitionTime * 1000/2, function() {
+                $currentSlide.hide();
+            });
         $nextSlide.hide().css({'left':0, 'top':0, 'width': "100%", "height":"100%", 'opacity': 0}).show().animate({'opacity': 1}, plugin.options.transitionTime * 1000, function(){
             plugin.startTimer();
         });
@@ -209,12 +214,16 @@
         plugin.slides.css('z-index', 100);
 
         if ((nextSlide > plugin.activeSlide) || (plugin.activeSlide == plugin.slides.length-1 && nextSlide == 0)){
-            $currentSlide.css({'z-index':999}).animate({'left': -1*imageWidth}, plugin.options.transitionTime * 1000, plugin.options.easing);
+            $currentSlide.css({'z-index':999}).animate({'left': -1*imageWidth}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+                $currentSlide.hide();
+            });
             $nextSlide.css({'left': imageWidth, 'z-index':1000}).show().animate({'left': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
                 plugin.startTimer();
             });
         } else {
-            $currentSlide.css({'z-index':999}).animate({'left': imageWidth}, plugin.options.transitionTime * 1000, plugin.options.easing);
+            $currentSlide.css({'z-index':999}).animate({'left': imageWidth}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+                $currentSlide.hide();
+            });
             $nextSlide.css({'left': -1*imageWidth, 'z-index':1000}).show().animate({'left': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
                 plugin.startTimer();
             });
