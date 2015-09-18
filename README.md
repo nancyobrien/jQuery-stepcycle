@@ -4,7 +4,7 @@ jQuery-stepCycle
 StepCycle is a simple image rotator. 
 
 ### Version
-1.1
+1.2
 
 ### Options:
 
