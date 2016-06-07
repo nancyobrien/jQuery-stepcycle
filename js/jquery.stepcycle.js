@@ -1,303 +1,349 @@
-/* jQuery StepCycle v1.2 */
-;(function ( $, window, document, undefined ) {
+/* jQuery StepCycle v1.2 */ ;
+(function($, window, document, undefined) {
+	'use strict';
 
-    // Create the defaults once
-    var pluginName = "stepCycle",
-        defaults = {
-            transitionTime: 1.5,
-            displayTime: 5,
-            transition: 'zoom',
-            easing: 'linear',
-            navDotClass: 'navDot',
-            navContainerSelector: '.navDots',
-            navSelectedClass: 'selected',
-            navItemTemplate: '<a class="navDot" href="#">&nbsp;</a>',
-            prevButton: '.cycle_prev',
-            nextButton: '.cycle_next',
-            childSelector: '.banner_slide',
-            ie8CheckSelector: '.ltie9',
-            showNav: true
-        },
-        transitions = {
-            'fade': crossFade,
-            'zoom': zoomFade,
-            'slidePush': slidePush,
-            'slideOver': slideOver
-        };
+	// Create the defaults once
+	var pluginName = 'stepCycle';
+	var defaults = {
+		transitionTime: 1.5,
+		displayTime: 5,
+		transition: 'zoom',
+		easing: 'linear',
+		navDotClass: 'navDot',
+		navContainerSelector: '.navDots',
+		navSelectedClass: 'selected',
+		navItemTemplate: '<a class="navDot" href="#">&nbsp;</a>',
+		prevButton: '.cycle_prev',
+		nextButton: '.cycle_next',
+		childSelector: '.banner_slide',
+		ie8CheckSelector: '.ltie9',
+		showNav: true
+	};
+	var transitions = {
+		fade: crossFade,
+		zoom: zoomFade,
+		slidePush: slidePush,
+		slideOver: slideOver
+	};
 
-    // The actual plugin constructor
-    function Plugin( element, options ) {
-        this.element = element;
+	// The actual plugin constructor
+	function Plugin(element, options) {
+		this.element = element;
 
-        this.options = $.extend( {}, defaults, options) ;
+		this.options = $.extend({}, defaults, options);
 
-        this._defaults = defaults;
-        this._name = pluginName;
+		this._defaults = defaults;
+		this._name = pluginName;
 
-        this.init();
-    }
+		this.init();
+	}
 
-    Plugin.prototype = {
-        init: init,
-        startTimer: startTimer,
-        setupNav: setupNav,
-        transitionSlide: transitionSlide,
-        crossFade: crossFade,
-        zoomFade: zoomFade,
-        slidePush: slidePush,
-        slideOver: slideOver
-    };
+	Plugin.prototype = {
+		init: init,
+		startTimer: startTimer,
+		setupNav: setupNav,
+		transitionSlide: transitionSlide,
+		crossFade: crossFade,
+		zoomFade: zoomFade,
+		slidePush: slidePush,
+		slideOver: slideOver
+	};
 
-    function init() {
+	function init() {
 
-        // Properties
-        this.timeout = 0;
-        this.navDotClass = this.options.navDotClass;
-        this.activeSlide = 0;
-        this.transition = transitions[this.options.transition] || crossFade;
+		// Properties
+		this.timeout = 0;
+		this.navDotClass = this.options.navDotClass;
+		this.activeSlide = 0;
+		this.transition = transitions[this.options.transition] || crossFade;
 
-        if(isIE8(this.options.ie8CheckSelector)) {
-            this.transition = transitions['fade'];
-        }
+		if (isIE8(this.options.ie8CheckSelector)) {
+			this.transition = transitions.fade;
+		}
 
-        // Events
-        $(this.options.prevButton).click($.proxy(clickPrev, this));
-        $(this.options.nextButton).click($.proxy(clickNext, this));
+		// Events
+		$(this.options.prevButton).click($.proxy(clickPrev, this));
+		$(this.options.nextButton).click($.proxy(clickNext, this));
 
-        // Captures slides
-        if (!this.options.childSelector) {
-            this.slides = $(this.element).children();
-        } else {
-            this.slides = $(this.element).find(this.options.childSelector);
-        }
+		// Captures slides
+		if (!this.options.childSelector) {
+			this.slides = $(this.element).children();
+		} else {
+			this.slides = $(this.element).find(this.options.childSelector);
+		}
 
-        // Initialize the slider
-        if (this.slides.length > 0) {
+		// Initialize the slider
+		if (this.slides.length > 0) {
 
-            // hide inner element
-            if (isIE8(this.options.ie8CheckSelector)) {
-                this.slides.find('.banner_image, .banner_overlay').hide();
-            }
+			// hide inner element
+			if (isIE8(this.options.ie8CheckSelector)) {
+				this.slides.find('.banner_image, .banner_overlay').hide();
+			}
 
-            // hide elements
-            this.slides.hide().first().show();
+			// hide elements
+			this.slides.hide().first().show();
 
-            if (isIE8(this.options.ie8CheckSelector)) {
-                this.slides.first().find('.banner_image, .banner_overlay').show();
-            }
+			if (isIE8(this.options.ie8CheckSelector)) {
+				this.slides.first().find('.banner_image, .banner_overlay').show();
+			}
 
-            this.startTimer();
+			this.startTimer();
 
-            if(this.options.showNav) {
-                setupNav(this, this.options);
-            } else {
-                $(this.options.navContainerSelector).hide();
-            }
-        }
-    }
-   
-    function startTimer() {
+			if (this.options.showNav) {
+				setupNav(this, this.options);
+			} else {
+				$(this.options.navContainerSelector).hide();
+			}
+		}
+	}
 
-        var plugin = this;
+	function startTimer() {
 
-        plugin.timeout = setTimeout(function() {
-            plugin.transitionSlide()
-        }, plugin.options.displayTime * 1000);
-    }
+		var plugin = this;
 
-    // setup nav elements
-    function setupNav(rotator, options) {
+		plugin.timeout = setTimeout(function() {
+			plugin.transitionSlide();
+		}, plugin.options.displayTime * 1000);
+	}
 
-        var $navContainer = $(options.navContainerSelector);
+	// setup nav elements
+	function setupNav(rotator, options) {
 
-        $navContainer.empty();
-        rotator.slides.each(function(index, element) {
-            $navContainer.append(options.navItemTemplate);
-        });
+		var $navContainer = $(options.navContainerSelector);
 
-        rotator.navDots = $navContainer.find('.' + rotator.navDotClass);
-        rotator.navDots.removeClass(options.navSelectedClass);
-        $(rotator.navDots[rotator.activeSlide]).addClass(options.navSelectedClass);
+		$navContainer.empty();
+		rotator.slides.each(function(index, element) {
+			$navContainer.append(options.navItemTemplate);
+		});
 
-        rotator.navDots.find('a').click(function(e) {
-            e.preventDefault();
-            
-            var nextSlide = rotator.navDots.find('a').index(this);
-            rotator.transitionSlide(nextSlide);
-        });
-    }
+		rotator.navDots = $navContainer.find('.' + rotator.navDotClass);
+		rotator.navDots.removeClass(options.navSelectedClass);
+		$(rotator.navDots[rotator.activeSlide]).addClass(options.navSelectedClass);
 
-    // transition to the next slide
-    function transitionSlide(nextSlide) {
+		rotator.navDots.find('a').click(function(e) {
 
-        if (nextSlide == this.activeSlide) {
-            return;
-        }
+			var nextSlide = rotator.navDots.find('a').index(this);
+			rotator.transitionSlide(nextSlide);
 
-        clearTimeout(this.timeout);
-        this.slides.stop(true);
+			e.preventDefault();
+		});
+	}
 
-        if (nextSlide==undefined) {
-            nextSlide = this.activeSlide + 1;
-        }
+	// transition to the next slide
+	function transitionSlide(nextSlide) {
 
-        if (nextSlide >= this.slides.length || nextSlide < 0) {
-            nextSlide = 0;
-        }
+		if (nextSlide === this.activeSlide) {
+			return;
+		}
 
-        this.transition(nextSlide);
-        this.activeSlide = nextSlide;
+		clearTimeout(this.timeout);
+		this.slides.stop(true);
 
-        if(this.options.showNav) {
-            this.navDots.removeClass(this.options.navSelectedClass);
-            $(this.navDots[this.activeSlide]).addClass(this.options.navSelectedClass);
-        }
-    }
+		if (nextSlide === undefined) {
+			nextSlide = this.activeSlide + 1;
+		}
 
-    // crossfade animation
-    function crossFade(nextSlide) {
+		if (nextSlide >= this.slides.length || nextSlide < 0) {
+			nextSlide = 0;
+		}
 
-        var plugin = this,
-            $currentSlide = $(this.slides[this.activeSlide]),
-            $nextSlide = $(this.slides[nextSlide]);
+		this.transition(nextSlide);
+		this.activeSlide = nextSlide;
 
-        if (isIE8(plugin.options.ie8CheckSelector)) {
-            $currentSlide
-                .fadeOut(plugin.options.transitionTime * 1000, function() {
-                    $currentSlide.hide();
-                })
-                .find('.banner_image, .banner_overlay')
-                .fadeOut(plugin.options.transitionTime * 1000);
-            $nextSlide
-                .show()
-                .fadeIn(plugin.options.transitionTime * 1000)
-                .find('.banner_image, .banner_overlay')
-                .fadeIn(plugin.options.transitionTime * 1000, function() {
-                plugin.startTimer();
-            });
-        } else {
-            $currentSlide.animate({'opacity': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
-                $currentSlide.hide();
-            });
-            $nextSlide.css('opacity', 0).show().animate({'opacity': 1}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
-                plugin.startTimer();
-            });
-        }
-    }
+		if (this.options.showNav) {
+			this.navDots.removeClass(this.options.navSelectedClass);
+			$(this.navDots[this.activeSlide]).addClass(this.options.navSelectedClass);
+		}
+	}
 
-    // zoomfade animation
-    function zoomFade(nextSlide) {
+	// crossfade animation
+	function crossFade(nextSlide) {
 
-        var plugin = this,
-            $currentSlide = $(this.slides[this.activeSlide]),
-            $nextSlide = $(this.slides[nextSlide]);
+		var plugin = this;
+		var $currentSlide = $(this.slides[this.activeSlide]);
+		var $nextSlide = $(this.slides[nextSlide]);
 
-        var aniLeft = $currentSlide.width() * -.125;
-        var aniTop = $nextSlide.height() * -.125;
+		if (isIE8(plugin.options.ie8CheckSelector)) {
+			$currentSlide
+				.fadeOut(plugin.options.transitionTime * 1000, function() {
+					$currentSlide.hide();
+				})
+				.find('.banner_image, .banner_overlay')
+				.fadeOut(plugin.options.transitionTime * 1000);
+			$nextSlide
+				.show()
+				.fadeIn(plugin.options.transitionTime * 1000)
+				.find('.banner_image, .banner_overlay')
+				.fadeIn(plugin.options.transitionTime * 1000, function() {
+					plugin.startTimer();
+				});
+		} else {
+			$currentSlide.animate({
+				opacity: 0
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				$currentSlide.hide();
+			});
+			$nextSlide.css('opacity', 0).show().animate({
+				opacity: 1
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				plugin.startTimer();
+			});
+		}
+	}
 
-        $currentSlide.animate({'width': "125%", "height":"125%", 'opacity': 0, 'left':aniLeft, 'top':aniTop}, plugin.options.transitionTime * 1000/2, function() {
-                $currentSlide.hide();
-            });
-        $nextSlide.hide().css({'left':0, 'top':0, 'width': "100%", "height":"100%", 'opacity': 0}).show().animate({'opacity': 1}, plugin.options.transitionTime * 1000, function(){
-            plugin.startTimer();
-        });
-    }
+	// zoomfade animation
+	function zoomFade(nextSlide) {
 
-    // slidepush animation
-    function slidePush(nextSlide) {
+		var plugin = this;
+		var $currentSlide = $(this.slides[this.activeSlide]);
+		var $nextSlide = $(this.slides[nextSlide]);
 
-        var plugin = this,
-            $currentSlide = $(this.slides[this.activeSlide]),
-            $nextSlide = $(this.slides[nextSlide]);
+		var aniLeft = $currentSlide.width() * -0.125;
+		var aniTop = $nextSlide.height() * -0.125;
 
-        var imageWidth = $currentSlide.width();
-        plugin.slides.css('z-index', 100);
+		$currentSlide.animate({
+			width: '125%',
+			height: '125%',
+			opacity: 0,
+			left: aniLeft,
+			top: aniTop
+		}, plugin.options.transitionTime * 1000 / 2, function() {
+			$currentSlide.hide();
+		});
+		$nextSlide.hide().css({
+			left: 0,
+			top: 0,
+			width: '100%',
+			height: '100%',
+			opacity: 0
+		}).show().animate({
+			opacity: 1
+		}, plugin.options.transitionTime * 1000, function() {
+			plugin.startTimer();
+		});
+	}
 
-        if ((nextSlide > plugin.activeSlide) || (plugin.activeSlide == plugin.slides.length-1 && nextSlide == 0)){
-            $currentSlide.css({'z-index':999}).animate({'left': -1*imageWidth}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
-                $currentSlide.hide();
-            });
-            $nextSlide.css({'left': imageWidth, 'z-index':1000}).show().animate({'left': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
-                plugin.startTimer();
-            });
-        } else {
-            $currentSlide.css({'z-index':999}).animate({'left': imageWidth}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
-                $currentSlide.hide();
-            });
-            $nextSlide.css({'left': -1*imageWidth, 'z-index':1000}).show().animate({'left': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
-                plugin.startTimer();
-            });
-        }
-    }
+	// slidepush animation
+	function slidePush(nextSlide) {
 
-    // slideover animation
-    function slideOver(nextSlide) {
+		var plugin = this;
+		var $currentSlide = $(this.slides[this.activeSlide]);
+		var $nextSlide = $(this.slides[nextSlide]);
 
-        var plugin = this,
-            $currentSlide = $(this.slides[this.activeSlide]),
-            $nextSlide = $(this.slides[nextSlide]);
+		var imageWidth = $currentSlide.width();
+		plugin.slides.css('z-index', 100);
 
-        var imageWidth = $currentSlide.width();
-        plugin.slides.css('z-index', 100);
-        $currentSlide.css({'z-index':999});
+		if ((nextSlide > plugin.activeSlide) || (plugin.activeSlide === plugin.slides.length - 1 && nextSlide === 0)) {
+			$currentSlide.css({
+				'z-index': 999
+			}).animate({
+				left: -1 * imageWidth
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				$currentSlide.hide();
+			});
+			$nextSlide.css({
+				left: imageWidth,
+				'z-index': 1000
+			}).show().animate({
+				left: 0
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				plugin.startTimer();
+			});
+		} else {
+			$currentSlide.css({
+				'z-index': 999
+			}).animate({
+				left: imageWidth
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				$currentSlide.hide();
+			});
+			$nextSlide.css({
+				left: -1 * imageWidth,
+				'z-index': 1000
+			}).show().animate({
+				left: 0
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				plugin.startTimer();
+			});
+		}
+	}
 
-        if ((nextSlide > plugin.activeSlide) || (plugin.activeSlide == plugin.slides.length-1 && nextSlide == 0)){
-            $nextSlide.css({'left': imageWidth, 'z-index':1000}).show().animate({'left': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
-                plugin.startTimer();
-            });
-        } else {
-            $nextSlide.css({'left': -imageWidth, 'z-index':1000}).show().animate({'left': 0}, plugin.options.transitionTime * 1000, plugin.options.easing, function(){
-                plugin.startTimer();
-            });
-        }
-    }
+	// slideover animation
+	function slideOver(nextSlide) {
 
-    var isIE = function() {
-        return (navigator.userAgent.indexOf('Trident') > -1);
-    }
+		var plugin = this;
+		var $currentSlide = $(this.slides[this.activeSlide]);
+		var $nextSlide = $(this.slides[nextSlide]);
 
-    var isIE8 = function(ie8CheckSelector) {
-        return ($(ie8CheckSelector).length > 0) ;
-    }
+		var imageWidth = $currentSlide.width();
+		plugin.slides.css('z-index', 100);
+		$currentSlide.css({
+			'z-index': 999
+		});
 
-    //=====================================================
-    // EVENTS
-    //=====================================================
-    function clickPrev(e) {
+		if ((nextSlide > plugin.activeSlide) || (plugin.activeSlide === plugin.slides.length - 1 && nextSlide === 0)) {
+			$nextSlide.css({
+				left: imageWidth,
+				'z-index': 1000
+			}).show().animate({
+				left: 0
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				plugin.startTimer();
+			});
+		} else {
+			$nextSlide.css({
+				left: -imageWidth,
+				'z-index': 1000
+			}).show().animate({
+				left: 0
+			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
+				plugin.startTimer();
+			});
+		}
+	}
 
-        e.preventDefault();
+	function isIE8(ie8CheckSelector) {
+		return ($(ie8CheckSelector).length > 0);
+	}
 
-        var nextSlide = this.activeSlide - 1;
-        
-        if (nextSlide < 0) {
-            nextSlide = this.slides.length - 1;
-        }
+	//=====================================================
+	// EVENTS
+	//=====================================================
+	function clickPrev(e) {
 
-        this.transitionSlide(nextSlide);
-    }
+		var nextSlide = this.activeSlide - 1;
 
-    function clickNext(e) {
+		e.preventDefault();
 
-        e.preventDefault();
+		if (nextSlide < 0) {
+			nextSlide = this.slides.length - 1;
+		}
 
-        var nextSlide = this.activeSlide + 1;
-        
-        if (nextSlide >= this.slides.length) {
-            nextSlide = 0;
-        }
+		this.transitionSlide(nextSlide);
+	}
 
-        this.transitionSlide(nextSlide);
-    }
+	function clickNext(e) {
 
-    // A really lightweight plugin wrapper around the constructor,
-    // preventing against multiple instantiations
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, "plugin_" + pluginName)) {
-                $.data(this, "plugin_" + pluginName,
-                new Plugin( this, options ));
-            }
-        });
-    };
+		var nextSlide = this.activeSlide + 1;
 
-})( jQuery, window, document );
+		e.preventDefault();
+
+		if (nextSlide >= this.slides.length) {
+			nextSlide = 0;
+		}
+
+		this.transitionSlide(nextSlide);
+	}
+
+	// A really lightweight plugin wrapper around the constructor,
+	// preventing against multiple instantiations
+	$.fn[pluginName] = function(options) {
+		return this.each(function() {
+			if (!$.data(this, 'plugin_' + pluginName)) {
+				$.data(this, 'plugin_' + pluginName,
+					new Plugin(this, options));
+			}
+		});
+	};
+
+})(jQuery, window, document);
