@@ -1,10 +1,10 @@
 jQuery-stepCycle
 ==================
 
-StepCycle is a simple image rotator. 
+StepCycle is a simple image rotator.
 
 ### Version
-1.1
+1.3
 
 ### Options:
 
@@ -20,6 +20,8 @@ StepCycle is a simple image rotator.
 * **childSelector** - selector that determines which children are considered slides. Default is .banner_slide
 * **ie8CheckSelector** - selector that is used to determine if the current browser is IE8. Default is .ltie9
 * **showNav** - determines whether the nav dots will be shown
+* **transitionBegin** - callback that runs when a slide transition begins. Parameters are $oldSlide and $newSlide
+* **transitionComplete** - callback that runs when a slide transition is complete. Parameters are $oldSlide, and $newSlide
 
 
 ### Example Usage:
@@ -28,7 +30,7 @@ StepCycle is a simple image rotator.
 <div class="banner-slider">
 
     <ul class="banner-slider_nav"></ul>
-    
+
     <div class="banner">
         <img class="banner_image" src="/images/banner-placeholder.jpg" />
         <div class="banner_overlay">
@@ -54,11 +56,11 @@ StepCycle is a simple image rotator.
 <script>
     $(document).ready(function(e){
         $('.banner-slider').stepCycle({
-          transition:'fade', 
-          childSelector: '.banner', 
-          transitionTime: .75, 
-          navContainer: '.banner-slider_nav', 
-          navDot:'banner-slider_nav_item', 
+          transition:'fade',
+          childSelector: '.banner',
+          transitionTime: .75,
+          navContainer: '.banner-slider_nav',
+          navDot:'banner-slider_nav_item',
           navItemTemplate: '<li class="banner-slider_nav_item banner-slider_nav_item--is-selected"><a href="#">&bull;</a></li>',
           navSelectedClass: 'banner-slider_nav_item--is-selected'
         });
