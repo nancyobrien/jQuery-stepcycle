@@ -1,4 +1,4 @@
-/* jQuery StepCycle v1.2 */ ;
+/* jQuery StepCycle v1.3 */ ;
 (function($, window, document, undefined) {
 	'use strict';
 
@@ -163,6 +163,10 @@
 		var $currentSlide = $(this.slides[this.activeSlide]);
 		var $nextSlide = $(this.slides[nextSlide]);
 
+		if (typeof plugin.options.transitionBegin === 'function') {
+			plugin.options.transitionBegin($currentSlide, $nextSlide);
+		}
+
 		if (isIE8(plugin.options.ie8CheckSelector)) {
 			$currentSlide
 				.fadeOut(plugin.options.transitionTime * 1000, function() {
@@ -172,7 +176,11 @@
 				.fadeOut(plugin.options.transitionTime * 1000);
 			$nextSlide
 				.show()
-				.fadeIn(plugin.options.transitionTime * 1000)
+				.fadeIn(plugin.options.transitionTime * 1000, function() {
+					if (typeof plugin.options.transitionComplete === 'function') {
+						plugin.options.transitionComplete($currentSlide, $nextSlide);
+					}
+				})
 				.find('.banner_image, .banner_overlay')
 				.fadeIn(plugin.options.transitionTime * 1000, function() {
 					plugin.startTimer();
@@ -187,6 +195,9 @@
 				opacity: 1
 			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
 				plugin.startTimer();
+				if (typeof plugin.options.transitionComplete === 'function') {
+					plugin.options.transitionComplete($currentSlide, $nextSlide);
+				}
 			});
 		}
 	}
@@ -200,6 +211,10 @@
 
 		var aniLeft = $currentSlide.width() * -0.125;
 		var aniTop = $nextSlide.height() * -0.125;
+
+		if (typeof plugin.options.transitionBegin === 'function') {
+			plugin.options.transitionBegin($currentSlide, $nextSlide);
+		}
 
 		$currentSlide.animate({
 			width: '125%',
@@ -220,6 +235,9 @@
 			opacity: 1
 		}, plugin.options.transitionTime * 1000, function() {
 			plugin.startTimer();
+			if (typeof plugin.options.transitionComplete === 'function') {
+				plugin.options.transitionComplete($currentSlide, $nextSlide);
+			}
 		});
 	}
 
@@ -232,6 +250,10 @@
 
 		var imageWidth = $currentSlide.width();
 		plugin.slides.css('z-index', 100);
+
+		if (typeof plugin.options.transitionBegin === 'function') {
+			plugin.options.transitionBegin($currentSlide, $nextSlide);
+		}
 
 		if ((nextSlide > plugin.activeSlide) || (plugin.activeSlide === plugin.slides.length - 1 && nextSlide === 0)) {
 			$currentSlide.css({
@@ -248,6 +270,9 @@
 				left: 0
 			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
 				plugin.startTimer();
+				if (typeof plugin.options.transitionComplete === 'function') {
+					plugin.options.transitionComplete($currentSlide, $nextSlide);
+				}
 			});
 		} else {
 			$currentSlide.css({
@@ -264,6 +289,9 @@
 				left: 0
 			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
 				plugin.startTimer();
+				if (typeof plugin.options.transitionComplete === 'function') {
+					plugin.options.transitionComplete($currentSlide, $nextSlide);
+				}
 			});
 		}
 	}
@@ -281,6 +309,10 @@
 			'z-index': 999
 		});
 
+		if (typeof plugin.options.transitionBegin === 'function') {
+			plugin.options.transitionBegin($currentSlide, $nextSlide);
+		}
+
 		if ((nextSlide > plugin.activeSlide) || (plugin.activeSlide === plugin.slides.length - 1 && nextSlide === 0)) {
 			$nextSlide.css({
 				left: imageWidth,
@@ -289,6 +321,9 @@
 				left: 0
 			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
 				plugin.startTimer();
+				if (typeof plugin.options.transitionComplete === 'function') {
+					plugin.options.transitionComplete($currentSlide, $nextSlide);
+				}
 			});
 		} else {
 			$nextSlide.css({
@@ -298,6 +333,9 @@
 				left: 0
 			}, plugin.options.transitionTime * 1000, plugin.options.easing, function() {
 				plugin.startTimer();
+				if (typeof plugin.options.transitionComplete === 'function') {
+					plugin.options.transitionComplete($currentSlide, $nextSlide);
+				}
 			});
 		}
 	}

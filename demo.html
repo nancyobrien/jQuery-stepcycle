@@ -16,7 +16,7 @@
     <body>
 		<div class="banner">
 			<div class="banner-slider">
-				
+
 				<ul class="banner-slider_nav"></ul>
 
 				<div class="banner_slide">
@@ -74,11 +74,17 @@
         		var banner = $('.banner-slider').stepCycle({
         			transition: 'fade',
         			childSelector: '.banner_slide',
-        			transitionTime: .75, 
-        			navContainerSelector: '.banner-slider_nav', 
-        			navDotClass:'banner-slider_nav_item', 
+        			transitionTime: .75,
+        			navContainerSelector: '.banner-slider_nav',
+        			navDotClass:'banner-slider_nav_item',
         			navItemTemplate: '<li class="banner-slider_nav_item banner-slider_nav_item--is-selected"><a href="#">&bull;</a></li>',
-        			navSelectedClass: 'banner-slider_nav_item--is-selected'
+        			navSelectedClass: 'banner-slider_nav_item--is-selected',
+        			transitionBegin: function($oldSlide, $newSlide) {
+        				console.log('slide transition begin', $oldSlide, $newSlide);
+        			},
+        			transitionComplete: function($oldSlide, $newSlide) {
+        				console.log('slide transition complete', $oldSlide, $newSlide);
+        			}
         		});
         	})
         </script>
