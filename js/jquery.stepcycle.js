@@ -1,4 +1,4 @@
-/* jQuery StepCycle v1.3 */ ;
+/* jQuery StepCycle v1.4 */ ;
 (function($, window, document, undefined) {
 	'use strict';
 
@@ -17,6 +17,7 @@
 		nextButton: '.cycle_next',
 		childSelector: '.banner_slide',
 		ie8CheckSelector: '.ltie9',
+		randomize: false,
 		showNav: true
 	};
 	var transitions = {
@@ -73,7 +74,9 @@
 		}
 
 		// Initialize the slider
-		if (this.slides.length > 0) {
+		if (this.slides.length > 1) {
+
+			if (this.options.randomize) {shuffleArray(this.slides);}
 
 			// hide inner element
 			if (isIE8(this.options.ie8CheckSelector)) {
@@ -372,6 +375,26 @@
 
 		this.transitionSlide(nextSlide);
 	}
+
+
+	//=====================================================
+	// Helper functions
+	//=====================================================
+
+	function shuffleArray(array) {
+		/**
+		 * Randomize array element order in-place.
+		 * Using Durstenfeld shuffle algorithm.
+		 */
+	    for (var i = array.length - 1; i > 0; i--) {
+	        var j = Math.floor(Math.random() * (i + 1));
+	        var temp = array[i];
+	        array[i] = array[j];
+	        array[j] = temp;
+	    }
+	    return array;
+	}
+
 
 	// A really lightweight plugin wrapper around the constructor,
 	// preventing against multiple instantiations

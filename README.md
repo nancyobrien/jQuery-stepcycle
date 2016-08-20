@@ -4,7 +4,7 @@ jQuery-stepCycle
 StepCycle is a simple image rotator.
 
 ### Version
-1.3
+1.4
 
 ### Options:
 
@@ -22,6 +22,7 @@ StepCycle is a simple image rotator.
 * **showNav** - determines whether the nav dots will be shown
 * **transitionBegin** - callback that runs when a slide transition begins. Parameters are $oldSlide and $newSlide
 * **transitionComplete** - callback that runs when a slide transition is complete. Parameters are $oldSlide, and $newSlide
+* **randomize** - randomize the display order of the slides. Default is false.
 
 
 ### Example Usage:
@@ -59,6 +60,7 @@ StepCycle is a simple image rotator.
           transition:'fade',
           childSelector: '.banner',
           transitionTime: .75,
+          randomize: true,
           navContainer: '.banner-slider_nav',
           navDot:'banner-slider_nav_item',
           navItemTemplate: '<li class="banner-slider_nav_item banner-slider_nav_item--is-selected"><a href="#">&bull;</a></li>',
