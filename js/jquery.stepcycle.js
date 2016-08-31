@@ -1,10 +1,12 @@
-/* jQuery StepCycle v1.4 */ ;
+
+/* jQuery StepCycle v1.5 */ ;
 (function($, window, document, undefined) {
 	'use strict';
 
 	// Create the defaults once
 	var pluginName = 'stepCycle';
 	var defaults = {
+		autoAdvance: true,
 		transitionTime: 1.5,
 		displayTime: 5,
 		transition: 'zoom',
@@ -104,6 +106,10 @@
 
 		var plugin = this;
 
+		if (!plugin.options.autoAdvance) {
+			return;
+		}
+
 		plugin.timeout = setTimeout(function() {
 			plugin.transitionSlide();
 		}, plugin.options.displayTime * 1000);
@@ -125,8 +131,8 @@
 
 		rotator.navDots.find('a').click(function(e) {
 
-			var nextSlide = rotator.navDots.find('a').index(this);
-			rotator.transitionSlide(nextSlide);
+		var nextSlide = rotator.navDots.find('a').index(this);
+		rotator.transitionSlide(nextSlide);
 
 			e.preventDefault();
 		});
@@ -188,6 +194,9 @@
 				.fadeIn(plugin.options.transitionTime * 1000, function() {
 					plugin.startTimer();
 				});
+
+			this.slides.not($currentSlide).not($nextSlide).hide();
+
 		} else {
 			$currentSlide.animate({
 				opacity: 0
@@ -202,6 +211,8 @@
 					plugin.options.transitionComplete($currentSlide, $nextSlide);
 				}
 			});
+
+			this.slides.not($currentSlide).not($nextSlide).css('opacity', 0);
 		}
 	}
 
@@ -242,6 +253,9 @@
 				plugin.options.transitionComplete($currentSlide, $nextSlide);
 			}
 		});
+
+		this.slides.not($currentSlide).not($nextSlide).hide();
+
 	}
 
 	// slidepush animation
@@ -277,6 +291,9 @@
 					plugin.options.transitionComplete($currentSlide, $nextSlide);
 				}
 			});
+
+			this.slides.not($currentSlide).not($nextSlide).css('left', imageWidth);
+
 		} else {
 			$currentSlide.css({
 				'z-index': 999
@@ -296,7 +313,12 @@
 					plugin.options.transitionComplete($currentSlide, $nextSlide);
 				}
 			});
+
+			this.slides.not($currentSlide).not($nextSlide).css('left', -1 * imageWidth);
+
 		}
+
+
 	}
 
 	// slideover animation
@@ -328,6 +350,9 @@
 					plugin.options.transitionComplete($currentSlide, $nextSlide);
 				}
 			});
+
+			this.slides.not($currentSlide).not($nextSlide).css('left', imageWidth);
+
 		} else {
 			$nextSlide.css({
 				left: -imageWidth,
@@ -340,6 +365,9 @@
 					plugin.options.transitionComplete($currentSlide, $nextSlide);
 				}
 			});
+
+			this.slides.not($currentSlide).not($nextSlide).css('left', -1 * imageWidth);
+
 		}
 	}
 
